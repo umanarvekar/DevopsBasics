@@ -11,20 +11,21 @@ pool:
   vmImage: 'ubuntu-latest'  # You can also use windows-latest or macos-latest
 
 steps:
-- task: Checkout@2
+- task: Checkout@1  # Checkout the code from GitHub
 
-- task: UseJavaTool@0
-  inputs:
-    versionSpec: '11'  # Set the JDK version (adjust if necessary)
+- script: |
+    sudo apt update
+    sudo apt install openjdk-11-jdk -y  # Install Java 11 (adjust if needed)
+  displayName: 'Install Java 11'
 
-- task: Maven@3
+- task: Maven@3  # Use Maven to build the project
   inputs:
-    mavenPomFile: 'pom.xml'  # Path to your pom.xml
-    goals: 'clean package'  # Maven goals (clean and package the project)
+    mavenPomFile: 'pom.xml'  # Path to your pom.xml file
+    goals: 'clean package'
     options: '-DskipTests=true'  # Optionally skip tests for faster builds
 
 - task: PublishBuildArtifacts@1
   inputs:
-    pathToPublish: '$(Build.ArtifactStagingDirectory)'  # Artifact path (use the default build directory)
-    artifactName: 'drop'  # Name for your artifact
-    publishLocation: 'Container'  # Store the artifact in Azure DevOps pipeline storage
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'  # Path to artifact
+    artifactName: 'drop'  # Artifact name
+    publishLocation: 'Container'  # Publish to the pipeline container
