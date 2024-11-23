@@ -23,9 +23,3 @@ steps:
     mavenPomFile: 'pom.xml'  # Path to your pom.xml file
     goals: 'clean package'
     options: '-DskipTests=true'  # Optionally skip tests for faster builds
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathToPublish: '$(Build.ArtifactStagingDirectory)'  # Path to artifact
-    artifactName: 'drop'  # Artifact name
-    publishLocation: 'Container'  # Publish to the pipeline container
