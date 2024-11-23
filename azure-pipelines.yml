@@ -2,21 +2,29 @@
 # Build your Java project and run tests with Apache Maven.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
-- master
+  branches:
+    include:
+      - master  # or any branch you want to trigger the build from
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'  # You can also use windows-latest or macos-latest
 
 steps:
+- task: Checkout@2
+
+- task: UseJavaTool@0
+  inputs:
+    versionSpec: '11'  # Set the JDK version (adjust if necessary)
+
 - task: Maven@3
   inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    mavenPomFile: 'pom.xml'  # Path to your pom.xml
+    goals: 'clean package'  # Maven goals (clean and package the project)
+    options: '-DskipTests=true'  # Optionally skip tests for faster builds
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'  # Artifact path (use the default build directory)
+    artifactName: 'drop'  # Name for your artifact
+    publishLocation: 'Container'  # Store the artifact in Azure DevOps pipeline storage
