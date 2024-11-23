@@ -9,7 +9,7 @@ trigger:
       - master  # Change to your preferred branch
 
 pool:
-  vmImage: 'ubuntu-latest'  # You can also use 'windows-latest' or 'macos-latest'
+  vmImage: ubuntu-latest  # You can also use 'windows-latest' or 'macos-latest'
 
 steps:
 - task: Checkout@1  # Checkout the code from GitHub
